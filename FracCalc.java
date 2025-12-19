@@ -99,7 +99,7 @@ public class FracCalc {
       // The actual result value calls the calculation method that has the numerators, denominators, and operator sign as parameters that will be used
       String result = calculation(num1, den1, num2, den2, sign);
 
-      // If the calculation method returns the world "invalid" then an alert is returned that tells the user to enter something else
+      // If the calculation method returns the world "invalid" then an alert is returned that tells the user to enter something else 
       if (result.equals("invalid")) {
          return "0 can't be a denominator, please enter something else";
       }
@@ -107,8 +107,14 @@ public class FracCalc {
       int finalNum = Integer.parseInt(result.substring(0, result.indexOf("/")));
       int finalDen = Integer.parseInt(result.substring(result.indexOf("/") + 1, result.length()));
       // The final number that will be returned through input is a reduced version of the result that will be given through the reduce method
-      input = reduce(finalNum, finalDen);    
-      return input;    
+      String finalValue = reduce(finalNum, finalDen);  
+      
+      // The calculation method only returns invalid if the fraction division has a denominator of zero, so the reduce method returns invalid at the start if the
+      // final denominator is still zero
+      if (finalValue.equals("invalid"))  {
+         return "0 can't be a denominator, please enter something else";
+      }
+      return finalValue;    
    }
 
    // The inproperFraction method takes a String that's assumed to be a type of number (whole, fraction, mixed), and turns it into an inproper fraction
@@ -206,6 +212,7 @@ public class FracCalc {
          denResult = den1 * den2;
       // Fraction division is done here
       } else if (sign == '/') {
+         // If either denominators are zero, the word "invalid" is returned
          if (den1 == 0 || den2 == 0) {
             return "invalid";
          } else {
@@ -230,7 +237,10 @@ public class FracCalc {
    // This method is to reduce the final result to a simplified version if needed, such as inproper or unsimplified fractions
    public static String reduce (int num, int den) {
       String result;
-
+      
+      if (den == 0) {
+         return "invalid";
+      }
       // Below finds the greatest common factor of the numerator and the denominator to reduce the fraction later
       // 
       int dividend = Math.abs(num);
